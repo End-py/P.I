@@ -75,34 +75,40 @@ else:
 # --
 
 
-savefig = local_i + nome
+#savefig = local_i + nome
+
+
+# #
+# plt.figure(figsize=(12, 6))
+
+# fig1 = librosa.amplitude_to_db(np.abs(librosa.stft(data)))
+# librosa.display.specshow(fig1, x_axis='time', y_axis='linear', sr=fs, cmap='jet')
+
+# plt.title('Espectrograma')
+# plt.xlabel('Time [s]')
+# plt.ylabel('Frequecy [Hz]')
+# plt.colorbar(format='%+2.0f dB')
+# plt.savefig(savefig + '_fig1.jpg')
+# print(CYAN + 'Figura 1 Salvada.  :)')
+# plt.show()
+# # --
+
+
+# #
+# plt.figure(figsize=(12, 6))
+
+# fig2 = np.arange(0, len(data)* 1/fs, 1/fs)
+
+# plt.plot(fig2, data)
+# plt.xlabel('Time [s]')
+# plt.ylabel('Frequecy [Hz]')
+# plt.savefig(savefig + '_fig2.jpg')
+# print(CYAN + 'Figura 2 Salvada.  :)')
+# plt.show()
+# # --
 
 
 #
-plt.figure(figsize=(12, 6))
-
-fig1 = librosa.amplitude_to_db(np.abs(librosa.stft(data)))
-librosa.display.specshow(fig1, x_axis='time', y_axis='linear', sr=fs, cmap='jet')
-
-plt.title('Espectrograma')
-plt.xlabel('Time [s]')
-plt.ylabel('Frequecy [Hz]')
-plt.colorbar(format='%+2.0f dB')
-plt.savefig(savefig + '_fig1.jpg')
-print(CYAN + 'Figura 1 Salvada.  :)')
-plt.show()
-# --
-
-
-#
-plt.figure(figsize=(12, 6))
-
-fig2 = np.arange(0, len(data)* 1/fs, 1/fs)
-
-plt.plot(fig2, data)
-plt.xlabel('Time [s]')
-plt.ylabel('Frequecy [Hz]')
-plt.savefig(savefig + '_fig2.jpg')
-print(CYAN + 'Figura 2 Salvada.  :)')
-plt.show()
+dado = librosa.amplitude_to_db(np.abs(librosa.stft(data)))
+print(dado)
 # --
