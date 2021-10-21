@@ -1,6 +1,5 @@
 SpeechRecognition
 pipwin
-matplotlib
 librosa
 numpy==1.20
 pandas
