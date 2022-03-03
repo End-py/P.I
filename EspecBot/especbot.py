@@ -2,7 +2,6 @@ import os
 import speech_recognition as sr
 import numpy as np
 import librosa
-import librosa.display
 import sqlite3
 
 os.system('cls')
@@ -80,6 +79,7 @@ data, fs = librosa.load(file +'.wav', sr=44100)
 
 # Dado em espectrograma do audio
 dado = librosa.amplitude_to_db(np.abs(librosa.stft(data)))
+#print(dado)
 # --
 
 
