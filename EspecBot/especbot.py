@@ -1,4 +1,5 @@
 import os
+from tkinter import ttk
 import speech_recognition as sr
 import numpy as np
 import librosa
@@ -83,11 +84,38 @@ dado = librosa.amplitude_to_db(np.abs(librosa.stft(data)))
 # --
 
 
-# Salvando no Data Base
+# Conectando ao banco de dados
 conn = sqlite3.connect(database)
 cursor = conn.cursor()
+# --
 
-cursor.execute(f"INSERT INTO Especdados VALUES('{name}', '{Text}', '{dado}')")
-print('DataBase Update')
-conn.commit()
+
+#
+cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='Especdados'")
+tabela = cursor.fetchmany()
+#print(tabela)
+
+if tabela == [('Especdados',)]:
+    print('tabela ja existe')
+else:
+    print('Criando Tabela')
+    cursor.execute("CREATE TABLE Especdados (Code TEXT PRIMARY KEY, Text TEXT, Dado TEXT)")
+# --
+
+
+cursor.execute("SELECT Code FROM Especdados")
+coluna = cursor.fetchall()
+
+for li in coluna:
+    for num in li:
+        #print(num)
+        if name in num:
+            print('Update Tabela')
+            cursor.execute(f"UPDATE Especdados SET Dado = ('{dado}'), Text = ('{Text}') WHERE Code = ('{name}')")
+            conn.commit()
+
+        else:
+            print('Salvando no Banco de dados')
+            cursor.execute(f"INSERT INTO Especdados VALUES('{name}', '{Text}', '{dado}')")
+            conn.commit()
 # --

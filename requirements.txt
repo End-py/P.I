@@ -2,6 +2,5 @@ SpeechRecognition
 pipwin
 librosa
 numpy
-pandas
 openpyxl
 # pipwin install pyaudio  # instalado manualmente
