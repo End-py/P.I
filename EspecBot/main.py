@@ -1,9 +1,12 @@
 import os
-from tkinter import ttk
 import speech_recognition as sr
 import numpy as np
+import matplotlib.pyplot as plt
 import librosa
-import sqlite3
+import librosa.display
+import glob
+import compare as c
+from tqdm import tqdm
 
 os.system('cls')
 
@@ -74,48 +77,43 @@ else:
 
 
 # Audio
-data, fs = librosa.load(file +'.wav', sr=44100)
+audio, fs = librosa.load(file +'.wav', sr=44100)
 # --
 
 
-# Dado em espectrograma do audio
-dado = librosa.amplitude_to_db(np.abs(librosa.stft(data)))
-#print(dado)
-# --
+# Plot espectrograma
+plt.figure(figsize=(15,6))
+audio = librosa.stft(audio, n_fft=2048, hop_length=512, win_length=1024)
+audio = np.abs(audio)
+librosa.display.specshow(librosa.amplitude_to_db (audio, ref=np.max), x_axis='time', y_axis='log', sr=fs,)
+plt.xlabel('Time [s]')
+plt.ylabel('Frequency [Hz]')
+plt.savefig(f'EspecBot/database/img/{name}.jpg')
+#plt.show()
 
 
-# Conectando ao banco de dados
-conn = sqlite3.connect(database)
-cursor = conn.cursor()
-# --
+# Comparando
+def trataParametros():
+    # Imagem a ser comparada
+    img = (f'EspecBot/database/img/{name}.jpg')
+    return img
 
+if __name__ == "__main__":
+    img = trataParametros()
+    images_file_list = glob.glob("EspecBot\database\img\*.jpg") # Diretorio das imagens
 
-#
-cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='Especdados'")
-tabela = cursor.fetchmany()
-#print(tabela)
+    d = {}
+    i = 0
+    for f in tqdm(images_file_list):
+        #print(f)
+        score, _, _, _ = c.compare(img, f)
+        d[score] = f
+        i+=1
 
-if tabela == [('Especdados',)]:
-    print('tabela ja existe')
-else:
-    print('Criando Tabela')
-    cursor.execute("CREATE TABLE Especdados (Code TEXT PRIMARY KEY, Text TEXT, Dado TEXT)")
-# --
-
-
-cursor.execute("SELECT Code FROM Especdados")
-coluna = cursor.fetchall()
-
-for li in coluna:
-    for num in li:
-        #print(num)
-        if name in num:
-            print('Update Tabela')
-            cursor.execute(f"UPDATE Especdados SET Dado = ('{dado}'), Text = ('{Text}') WHERE Code = ('{name}')")
-            conn.commit()
-
-        else:
-            print('Salvando no Banco de dados')
-            cursor.execute(f"INSERT INTO Especdados VALUES('{name}', '{Text}', '{dado}')")
-            conn.commit()
+# pontuação
+    print("\n")
+    for i in sorted(d, reverse=True):
+        print (i, d[i])
+        score, i1, i2, diff = c.compare(img, d[i])
+        c.plot(i1, i2, diff, score)
 # --
