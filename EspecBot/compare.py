@@ -14,12 +14,14 @@ def plot(i1, i2, diff, ssim):
     ax = axes.ravel()
 
     ax[0].imshow(i1, cmap=plt.cm.gray)
-    ax[1].set_xlabel("SSIM: {:.2f}".format(ssim))
+    ax[0].set_xlabel("Figura Base")
+    ax[1].set_xlabel("Pontuaçao: {:.2f}".format(ssim))
     ax[1].imshow(i2, cmap=plt.cm.gray)
     ax[2].imshow(diff, cmap=plt.cm.gray)
+    ax[2].set_xlabel("Diferença entre elas")
 
     fig.tight_layout()
-    #plt.show()
+    plt.show()
 
 def compare(image1_filename, image2_filename):
     image1 = loadImage(image1_filename)

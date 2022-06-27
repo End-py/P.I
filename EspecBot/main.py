@@ -1,4 +1,5 @@
 import os
+from traceback import print_tb
 import speech_recognition as sr
 import numpy as np
 import matplotlib.pyplot as plt
@@ -10,14 +11,12 @@ from tqdm import tqdm
 
 os.system('cls')
 
+print('\n 1 = ler um arquivo.'
+    '\n 2 = gerar um audio.')
 
-alt = input('Voce quer ?'
-        '\n 1 = ler um arquivo.'
-        '\n 2 = gerar um audio.'
-        '\n ?: ')
+alt = input('\nVoce quer ?: ')
 
-
-#
+# Diretorios
 local = 'EspecBot/database/audios/'
 database = 'EspecBot/database/DataBase.db'
 # --
@@ -52,6 +51,7 @@ if alt == '2':
 elif alt == '1':
     try:
         name = input('Nome do arquivo?: ')
+        print('\n')
         file = local + name
 
         with sr.AudioFile(file + '.wav') as source:
@@ -82,15 +82,14 @@ audio, fs = librosa.load(file +'.wav', sr=44100)
 
 
 # Plot espectrograma
-plt.figure(figsize=(15,6))
+plt.figure(figsize=(10, 4))
 audio = librosa.stft(audio, n_fft=2048, hop_length=512, win_length=1024)
 audio = np.abs(audio)
 librosa.display.specshow(librosa.amplitude_to_db (audio, ref=np.max), x_axis='time', y_axis='log', sr=fs,)
 plt.xlabel('Time [s]')
 plt.ylabel('Frequency [Hz]')
 plt.savefig(f'EspecBot/database/img/{name}.jpg')
-#plt.show()
-
+plt.show()
 
 # Comparando
 def trataParametros():
@@ -109,11 +108,15 @@ if __name__ == "__main__":
         score, _, _, _ = c.compare(img, f)
         d[score] = f
         i+=1
+#
 
-# pontuação
+
+# pontuação de cada Img
     print("\n")
     for i in sorted(d, reverse=True):
-        print (i, d[i])
-        score, i1, i2, diff = c.compare(img, d[i])
-        c.plot(i1, i2, diff, score)
+
+        if i >= 0.65:
+            print(i, d[i])
+            score, i1, i2, diff = c.compare(img, d[i])
+            c.plot(i1, i2, diff, score)
 # --
