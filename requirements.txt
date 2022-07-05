@@ -1,10 +1,6 @@
 SpeechRecognition==3.8.1
-librosa==0.9.1
-pipwin==0.5.2
-matplotlib==3.5.2
-numpy==1.22.4
-scikit-image==0.19.2
+librosa==0.9.2
+matplotlib==3.3.4
+numpy==1.19.5
+scikit-image==0.17.2
 tqdm==4.64.0
-
-# pipwin install PyAudio==0.2.11  # instalado manualmente
-# pip install --upgrade pip setuptools wheel # Update pip
